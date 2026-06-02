@@ -1,5 +1,5 @@
 import re
-import os  # Added to track paths safely
+import os  
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,7 +24,7 @@ def parse_and_average(filename):
     no_stream_times = [float(t) for t in re.findall(r"no-stream\s+([\d.]+)", content)]
     data["no-stream"] = no_stream_times
     
-    # NEW FLEXIBLE REGEX: Looks for a number (stream count), spaces, and a float (time)
+    # Looks for a number (stream count), spaces, and a float (time)
     # This bypasses the trailing text requirements completely
     stream_runs = re.findall(r"^\s*(\d+)\s+([\d.]+)", content, re.MULTILINE)
     for stream_count, time_val in stream_runs:
@@ -83,11 +83,10 @@ for iters in [1, 50, 200]:
     except FileNotFoundError:
         print(f"Error: Missing logs for iteration configuration: {iters}")
 
-# ============================================================================
-# FIXED PLOTTING BLOCK FOR LOCAL VS CODE RUNS
-# ============================================================================
+# Plot of the trends across different stream
+
 if plot_trends:
-    # 1. Force matplotlib to use a standard visual window backend if running locally
+    # Force matplotlib to use a standard visual window backend if running locally
     import matplotlib
     if not os.environ.get('DISPLAY', '') and not os.name == 'nt':
         matplotlib.use('Agg') # Fallback for headless environments
@@ -112,13 +111,10 @@ if plot_trends:
     plt.grid(True, linestyle='--', alpha=0.6)
     plt.legend(fontsize=11)
     
-    # CRITICAL FIX: Save the isolated figure handle FIRST before calling plt.show()
-    # This prevents the visual engine from wiping the data out of memory.
     plot_filename = "cuda_streams_comparison.png"
     
     fig.savefig(plot_filename, dpi=300, bbox_inches='tight')
     print(f"\n[Plot Success] Comparison line graph saved as: {os.path.abspath(plot_filename)}")
-    
-    # Display the plot window locally on your computer
+
     plt.show()
     plt.close(fig)
