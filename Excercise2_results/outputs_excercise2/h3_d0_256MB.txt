@@ -1,0 +1,21 @@
+=============================================================
+Device:       Tesla T4
+Host memory:  managed        (type 3)
+Device mem:   device   (type 0)
+Array size:   256 MB  (67108864 floats)
+Iterations:   20 timed  (+ 5 discarded warmups)
+=============================================================
+
+Results (all times in ms, bandwidth = array_size / mean_time):
+
+  host alloc            mean=   0.036 ms  median=   0.036 ms  stddev=  0.002 ms  bw=7471.51 GB/s
+  device alloc          mean=   0.626 ms  median=   0.617 ms  stddev=  0.022 ms  bw=428.99 GB/s
+  H2D transfer          mean=  63.276 ms  median=  63.254 ms  stddev=  0.170 ms  bw=  4.24 GB/s
+  D2H transfer          mean=  49.249 ms  median=  49.236 ms  stddev=  0.291 ms  bw=  5.45 GB/s
+  kernel                mean=   2.206 ms  median=   2.203 ms  stddev=  0.058 ms  bw=121.70 GB/s
+  device free           mean=   2.616 ms  median=   2.616 ms  stddev=  0.012 ms  bw=102.62 GB/s
+  host free             mean=   6.515 ms  median=   6.454 ms  stddev=  0.220 ms  bw= 41.20 GB/s
+-------------------------------------------------------------
+  Overall Elapsed Time for 20 Timed Iterations: 6487.94 ms
+  Average Time per Full Iteration (Timed):      324.40 ms
+=============================================================
