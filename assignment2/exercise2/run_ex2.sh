@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mkdir -p raw_outputs
+mkdir -p outputs_exercise2
 
 sizes=(1 4 16 64 256 512)
 host_types=(0 1 2 3 4)
@@ -16,7 +16,7 @@ for h in "${host_types[@]}"; do
 
     for s in "${sizes[@]}"; do
       echo "Running host=$h device=$d size=${s}MB"
-      ./mem_bench "$h" "$d" "$s" | tee "raw_outputs/h${h}_d${d}_${s}MB.txt"
+      ./mem_bench "$h" "$d" "$s" | tee "outputs_exercise2/h${h}_d${d}_${s}MB.txt"
     done
 
   done
