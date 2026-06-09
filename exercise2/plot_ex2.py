@@ -3,7 +3,7 @@ import re
 import pandas as pd
 import matplotlib.pyplot as plt
 
-RAW_DIR = "raw_outputs"
+RAW_DIR = "outputs_exercise2"
 PLOT_DIR = "plots"
 os.makedirs(PLOT_DIR, exist_ok=True)
 
@@ -54,8 +54,8 @@ for filename in os.listdir(RAW_DIR):
     host_free = extract_median(text, "host free")
     avg_pipeline = extract_average_pipeline(text)
 
-    h2d = 0.0 if "N/A (zero-copy: no explicit H2D transfer)" in text else extract_median(text, "H2D transfer")
-    d2h = 0.0 if "N/A (zero-copy: no explicit D2H transfer)" in text else extract_median(text, "D2H transfer")
+    h2d = None if "N/A (zero-copy: no explicit H2D transfer)" in text else extract_median(text, "H2D transfer")
+    d2h = None if "N/A (zero-copy: no explicit D2H transfer)" in text else extract_median(text, "D2H transfer")
 
     rows.append({
         "host_type": h,
@@ -81,8 +81,20 @@ def plot_metric(metric, ylabel, title, filename):
     plt.figure(figsize=(10, 6))
 
     for combo, group in df.groupby("combination"):
+
+        # Skip mapped zero-copy only in H2D and D2H plots
+        if metric in ["h2d", "d2h"] and combo == "mapped-zero-copy + device":
+            continue
+
         group = group.sort_values("size_mb")
-        plt.plot(group["size_mb"], group[metric], marker="o", label=combo)
+
+        # Convert pandas Series to numpy arrays to avoid matplotlib/pandas indexing error
+        plt.plot(
+            group["size_mb"].to_numpy(),
+            group[metric].to_numpy(),
+            marker="o",
+            label=combo
+        )
 
     plt.xscale("log", base=2)
     plt.xlabel("Message Size (MB)")
