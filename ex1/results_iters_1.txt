@@ -6,20 +6,20 @@ N_chunks:        16
 Transform Iters: 1
 
 === CPU reference ===
-  Total time:  923.95 ms
+  Total time:  923.20 ms
 
 === Version A: GPU, no streams ===
 Version         Time(ms)      Speedup     Correct 
 -------         --------      -------     ------- 
-no-stream       669.21        1.38      x  YES     
+no-stream       678.06        1.36      x  YES     
 
 === Version B: GPU, stream-based ===
 N_streams       Time(ms)      Speedup     Correct 
 ---------       --------      -------     ------- 
-1               369.77        2.50      x  YES     
-2               294.55        3.14      x  YES     
-4               296.69        3.11      x  YES     
-8               298.80        3.09      x  YES     
+1               365.61        2.53      x  YES     
+2               309.15        2.99      x  YES     
+4               296.36        3.12      x  YES     
+8               294.82        3.13      x  YES     
 
 --- RUN 2 ---
 N_total:         268435456 (1024 MB float input)
@@ -27,20 +27,20 @@ N_chunks:        16
 Transform Iters: 1
 
 === CPU reference ===
-  Total time:  915.11 ms
+  Total time:  925.53 ms
 
 === Version A: GPU, no streams ===
 Version         Time(ms)      Speedup     Correct 
 -------         --------      -------     ------- 
-no-stream       671.42        1.36      x  YES     
+no-stream       670.31        1.38      x  YES     
 
 === Version B: GPU, stream-based ===
 N_streams       Time(ms)      Speedup     Correct 
 ---------       --------      -------     ------- 
-1               369.36        2.48      x  YES     
-2               295.22        3.10      x  YES     
-4               294.53        3.11      x  YES     
-8               296.72        3.08      x  YES     
+1               366.86        2.52      x  YES     
+2               297.96        3.11      x  YES     
+4               295.89        3.13      x  YES     
+8               295.53        3.13      x  YES     
 
 --- RUN 3 ---
 N_total:         268435456 (1024 MB float input)
@@ -48,20 +48,20 @@ N_chunks:        16
 Transform Iters: 1
 
 === CPU reference ===
-  Total time:  919.78 ms
+  Total time:  925.85 ms
 
 === Version A: GPU, no streams ===
 Version         Time(ms)      Speedup     Correct 
 -------         --------      -------     ------- 
-no-stream       675.64        1.36      x  YES     
+no-stream       673.90        1.37      x  YES     
 
 === Version B: GPU, stream-based ===
 N_streams       Time(ms)      Speedup     Correct 
 ---------       --------      -------     ------- 
-1               368.47        2.50      x  YES     
-2               298.55        3.08      x  YES     
-4               298.94        3.08      x  YES     
-8               294.85        3.12      x  YES     
+1               364.52        2.54      x  YES     
+2               295.33        3.14      x  YES     
+4               293.95        3.15      x  YES     
+8               290.57        3.19      x  YES     
 
 --- RUN 4 ---
 N_total:         268435456 (1024 MB float input)
@@ -69,20 +69,20 @@ N_chunks:        16
 Transform Iters: 1
 
 === CPU reference ===
-  Total time:  924.80 ms
+  Total time:  922.97 ms
 
 === Version A: GPU, no streams ===
 Version         Time(ms)      Speedup     Correct 
 -------         --------      -------     ------- 
-no-stream       670.42        1.38      x  YES     
+no-stream       671.68        1.37      x  YES     
 
 === Version B: GPU, stream-based ===
 N_streams       Time(ms)      Speedup     Correct 
 ---------       --------      -------     ------- 
-1               371.18        2.49      x  YES     
-2               294.89        3.14      x  YES     
-4               298.77        3.10      x  YES     
-8               297.55        3.11      x  YES     
+1               369.24        2.50      x  YES     
+2               295.14        3.13      x  YES     
+4               292.09        3.16      x  YES     
+8               293.62        3.14      x  YES     
 
 --- RUN 5 ---
 N_total:         268435456 (1024 MB float input)
@@ -90,17 +90,17 @@ N_chunks:        16
 Transform Iters: 1
 
 === CPU reference ===
-  Total time:  920.37 ms
+  Total time:  919.91 ms
 
 === Version A: GPU, no streams ===
 Version         Time(ms)      Speedup     Correct 
 -------         --------      -------     ------- 
-no-stream       667.47        1.38      x  YES     
+no-stream       671.65        1.37      x  YES     
 
 === Version B: GPU, stream-based ===
 N_streams       Time(ms)      Speedup     Correct 
 ---------       --------      -------     ------- 
-1               365.04        2.52      x  YES     
-2               290.98        3.16      x  YES     
-4               294.26        3.13      x  YES     
-8               293.14        3.14      x  YES     
+1               363.01        2.53      x  YES     
+2               292.74        3.14      x  YES     
+4               291.33        3.16      x  YES     
+8               290.69        3.16      x  YES     
