@@ -1,7 +1,7 @@
 Configuration,Mean time (ms),Speedup vs CPU
-CPU reference,923.49,—
-"Version A, no streams",673.12,1.37x
-"Version B, 1 stream",365.85,2.52x
-"Version B, 2 streams",298.06,3.1x
-"Version B, 4 streams",293.92,3.14x
-"Version B, 8 streams",293.05,3.15x
+CPU reference,924.65,—
+"Version A, no streams",950.6,0.97x
+"Version B, 1 stream",379.22,2.44x
+"Version B, 2 streams",312.48,2.96x
+"Version B, 4 streams",313.87,2.95x
+"Version B, 8 streams",310.51,2.98x
