@@ -145,18 +145,17 @@ void run_gpu_streams(int n_streams, cudaStream_t* streams,
                      const float* h_in, uint* h_out) 
 {
     // [YOUR CODE GOES HERE]
-    float* d_in;
-    uint* d_out;
-    
-    size_t in_bytes  = (size_t)N_TOTAL * sizeof(float);
-    size_t out_bytes = (size_t)N_TOTAL * sizeof(uint);
+    float* d_in[MAX_STREAMS];
+    uint* d_out[MAX_STREAMS];
     
     size_t chunk_in_bytes  = (size_t)CHUNK_SIZE * sizeof(float);
     size_t chunk_out_bytes = (size_t)CHUNK_SIZE * sizeof(uint);
     
-    // Allocate full buffers on device
-    CHECK(cudaMalloc(&d_in, in_bytes));
-    CHECK(cudaMalloc(&d_out, out_bytes));
+    // Allocate localized pipelined storage slots per active stream track
+    for (int s = 0; s < n_streams; s++) {
+        CHECK(cudaMalloc(&d_in[s], chunk_in_bytes));
+        CHECK(cudaMalloc(&d_out[s], chunk_out_bytes));
+    }
     
     int grid_size = (CHUNK_SIZE + BLOCK_SIZE - 1) / BLOCK_SIZE;
     
@@ -166,14 +165,14 @@ void run_gpu_streams(int n_streams, cudaStream_t* streams,
         size_t offset = (size_t)i * CHUNK_SIZE;
         
         // Asynchronous copy of chunk from Host to Device
-        CHECK(cudaMemcpyAsync(d_in + offset, h_in + offset, chunk_in_bytes, 
+        CHECK(cudaMemcpyAsync(d_in[s], h_in + offset, chunk_in_bytes, 
                               cudaMemcpyHostToDevice, streams[s]));
                               
         // Run kernel transformation on this stream chunk
-        transform_kernel<<<grid_size, BLOCK_SIZE, 0, streams[s]>>>(d_in + offset, d_out + offset, CHUNK_SIZE);
+        transform_kernel<<<grid_size, BLOCK_SIZE, 0, streams[s]>>>(d_in[s], d_out[s], CHUNK_SIZE);
         
         // Asynchronous copy of transformed chunk from Device back to Host
-        CHECK(cudaMemcpyAsync(h_out + offset, d_out + offset, chunk_out_bytes, 
+        CHECK(cudaMemcpyAsync(h_out + offset, d_out[s], chunk_out_bytes, 
                               cudaMemcpyDeviceToHost, streams[s]));
     }
     
@@ -186,8 +185,10 @@ void run_gpu_streams(int n_streams, cudaStream_t* streams,
     }
     
     // Clean up memory
-    CHECK(cudaFree(d_in));
-    CHECK(cudaFree(d_out));
+    for (int s = 0; s < n_streams; s++) {
+        CHECK(cudaFree(d_in[s]));
+        CHECK(cudaFree(d_out[s]));
+    }
 }
 
 

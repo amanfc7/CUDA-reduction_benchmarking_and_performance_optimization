@@ -1,0 +1,106 @@
+=== Raw Benchmark Runs for Iters = 200 ===
+
+--- RUN 1 ---
+N_total:         268435456 (1024 MB float input)
+N_chunks:        16
+Transform Iters: 200
+
+=== CPU reference ===
+  Total time:  56752.58 ms
+
+=== Version A: GPU, no streams ===
+Version         Time(ms)      Speedup     Correct 
+-------         --------      -------     ------- 
+no-stream       983.22        57.72     x  YES     
+
+=== Version B: GPU, stream-based ===
+N_streams       Time(ms)      Speedup     Correct 
+---------       --------      -------     ------- 
+1               412.21        137.68    x  YES     
+2               321.41        176.57    x  YES     
+4               313.86        180.82    x  YES     
+8               311.60        182.13    x  YES     
+
+--- RUN 2 ---
+N_total:         268435456 (1024 MB float input)
+N_chunks:        16
+Transform Iters: 200
+
+=== CPU reference ===
+  Total time:  56767.66 ms
+
+=== Version A: GPU, no streams ===
+Version         Time(ms)      Speedup     Correct 
+-------         --------      -------     ------- 
+no-stream       980.65        57.89     x  YES     
+
+=== Version B: GPU, stream-based ===
+N_streams       Time(ms)      Speedup     Correct 
+---------       --------      -------     ------- 
+1               418.25        135.73    x  YES     
+2               317.68        178.69    x  YES     
+4               313.50        181.08    x  YES     
+8               310.96        182.56    x  YES     
+
+--- RUN 3 ---
+N_total:         268435456 (1024 MB float input)
+N_chunks:        16
+Transform Iters: 200
+
+=== CPU reference ===
+  Total time:  56770.82 ms
+
+=== Version A: GPU, no streams ===
+Version         Time(ms)      Speedup     Correct 
+-------         --------      -------     ------- 
+no-stream       977.99        58.05     x  YES     
+
+=== Version B: GPU, stream-based ===
+N_streams       Time(ms)      Speedup     Correct 
+---------       --------      -------     ------- 
+1               415.86        136.52    x  YES     
+2               318.72        178.12    x  YES     
+4               310.25        182.98    x  YES     
+8               308.01        184.32    x  YES     
+
+--- RUN 4 ---
+N_total:         268435456 (1024 MB float input)
+N_chunks:        16
+Transform Iters: 200
+
+=== CPU reference ===
+  Total time:  56718.11 ms
+
+=== Version A: GPU, no streams ===
+Version         Time(ms)      Speedup     Correct 
+-------         --------      -------     ------- 
+no-stream       978.81        57.95     x  YES     
+
+=== Version B: GPU, stream-based ===
+N_streams       Time(ms)      Speedup     Correct 
+---------       --------      -------     ------- 
+1               412.10        137.63    x  YES     
+2               316.39        179.27    x  YES     
+4               315.13        179.99    x  YES     
+8               308.91        183.61    x  YES     
+
+--- RUN 5 ---
+N_total:         268435456 (1024 MB float input)
+N_chunks:        16
+Transform Iters: 200
+
+=== CPU reference ===
+  Total time:  56721.57 ms
+
+=== Version A: GPU, no streams ===
+Version         Time(ms)      Speedup     Correct 
+-------         --------      -------     ------- 
+no-stream       981.08        57.82     x  YES     
+
+=== Version B: GPU, stream-based ===
+N_streams       Time(ms)      Speedup     Correct 
+---------       --------      -------     ------- 
+1               414.65        136.79    x  YES     
+2               315.52        179.77    x  YES     
+4               309.59        183.22    x  YES     
+8               308.63        183.79    x  YES     
