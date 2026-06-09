@@ -20,11 +20,7 @@
 #define N_TOTAL          (1 << 28)    // 256 M elements (~1 GB at float32)
 #define N_CHUNKS         16           // Number of chunks for the stream pipeline
 #define CHUNK_SIZE       (N_TOTAL / N_CHUNKS) // Elements per chunk
-<<<<<<< HEAD
-#define TRANSFORM_ITERS  200
-=======
 #define TRANSFORM_ITERS  50           // Compute load per element (Computational Intensity)
->>>>>>> f6595ad869480fe79689f43c3d82f421fbd1e75b
 
 // ============================================================================
 // DO NOT MODIFY THE FOLLOWING MACROS
@@ -68,22 +64,7 @@ __global__ void warmup_kernel() {
 }
 
 // [YOUR KERNELS GO HERE]
-__global__ void transform_kernel(const float* d_in, uint* d_out, int n) {
-    int idx = blockIdx.x * blockDim.x + threadIdx.x;
-    if (idx < n) {
-        float x = d_in[idx];
-        uint v;
-        
-        // Use a direct device register cast instead of memcpy
-        v = *(reinterpret_cast<const uint*>(&x));
-        
-        for (int i = 0; i < TRANSFORM_ITERS; i++) {
-            v = (v * 1103515245U) + 12345U;
-            v ^= (v >> 16);
-        }
-        d_out[idx] = v % 100U;
-    }
-}
+
 
 
 // ============================================================================
@@ -102,35 +83,6 @@ __global__ void transform_kernel(const float* d_in, uint* d_out, int n) {
 void run_gpu_nostream(const float* h_in, uint* h_out) 
 {
     // [YOUR CODE GOES HERE]
-    float* d_in;
-    uint* d_out;
-    
-    size_t in_bytes  = (size_t)N_TOTAL * sizeof(float);
-    size_t out_bytes = (size_t)N_TOTAL * sizeof(uint);
-    
-    // Allocate device buffers
-    CHECK(cudaMalloc(&d_in, in_bytes));
-    CHECK(cudaMalloc(&d_out, out_bytes));
-    
-    // Synchronously copy input to device
-    CHECK(cudaMemcpy(d_in, h_in, in_bytes, cudaMemcpyHostToDevice));
-    
-    // Launch execution grid
-    int grid_size = (N_TOTAL + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    transform_kernel<<<grid_size, BLOCK_SIZE>>>(d_in, d_out, N_TOTAL);
-    CHECK(cudaGetLastError());
-    
-    // Synchronously copy output back to host
-    CHECK(cudaMemcpy(h_out, d_out, out_bytes, cudaMemcpyDeviceToHost));
-    
-    // Compute the sequential inclusive prefix sum
-    for (int i = 1; i < N_TOTAL; i++) {
-        h_out[i] += h_out[i - 1];
-    }
-    
-    // Clean up memory
-    CHECK(cudaFree(d_in));
-    CHECK(cudaFree(d_out));
 }
 
 
@@ -140,58 +92,15 @@ void run_gpu_nostream(const float* h_in, uint* h_out)
 // Overlap Memory and Compute using Async memory copies.
 //
 // Parameters (Pre-allocated in main for you):
-//    n_streams    : The number of active streams for this benchmark run
-//    streams      : Array containing the initialized cudaStream_t objects
-//    h_in  : Host memory containing the full input (Size: N_TOTAL)
-//    h_out : Host memory to store the full output (Size: N_TOTAL)
+//   n_streams    : The number of active streams for this benchmark run
+//   streams      : Array containing the initialized cudaStream_t objects
+//   h_in  : Host memory containing the full input (Size: N_TOTAL)
+//   h_out : Host memory to store the full output (Size: N_TOTAL)
 // ----------------------------------------------------------------------------
 void run_gpu_streams(int n_streams, cudaStream_t* streams,
                      const float* h_in, uint* h_out) 
 {
     // [YOUR CODE GOES HERE]
-    float* d_in;
-    uint* d_out;
-    
-    size_t in_bytes  = (size_t)N_TOTAL * sizeof(float);
-    size_t out_bytes = (size_t)N_TOTAL * sizeof(uint);
-    
-    size_t chunk_in_bytes  = (size_t)CHUNK_SIZE * sizeof(float);
-    size_t chunk_out_bytes = (size_t)CHUNK_SIZE * sizeof(uint);
-    
-    // Allocate full buffers on device
-    CHECK(cudaMalloc(&d_in, in_bytes));
-    CHECK(cudaMalloc(&d_out, out_bytes));
-    
-    int grid_size = (CHUNK_SIZE + BLOCK_SIZE - 1) / BLOCK_SIZE;
-    
-    // Pipeline loop over all chunks using streams
-    for (int i = 0; i < N_CHUNKS; i++) {
-        int s = i % n_streams; // Target stream index selection
-        size_t offset = (size_t)i * CHUNK_SIZE;
-        
-        // Asynchronous copy of chunk from Host to Device
-        CHECK(cudaMemcpyAsync(d_in + offset, h_in + offset, chunk_in_bytes, 
-                              cudaMemcpyHostToDevice, streams[s]));
-                              
-        // Run kernel transformation on this stream chunk
-        transform_kernel<<<grid_size, BLOCK_SIZE, 0, streams[s]>>>(d_in + offset, d_out + offset, CHUNK_SIZE);
-        
-        // Asynchronous copy of transformed chunk from Device back to Host
-        CHECK(cudaMemcpyAsync(h_out + offset, d_out + offset, chunk_out_bytes, 
-                              cudaMemcpyDeviceToHost, streams[s]));
-    }
-    
-    // Wait for all streams to finish processing completely
-    CHECK(cudaDeviceSynchronize());
-    
-    // Compute the sequential inclusive prefix sum over the entire populated host array
-    for (int i = 1; i < N_TOTAL; i++) {
-        h_out[i] += h_out[i - 1];
-    }
-    
-    // Clean up memory
-    CHECK(cudaFree(d_in));
-    CHECK(cudaFree(d_out));
 }
 
 
@@ -277,7 +186,6 @@ int main(void) {
     run_gpu_nostream(h_in_p, h_out_A);
     
     cudaEventRecord(ta1);
-    cudaDeviceSynchronize(); // Explicit sync added for safety
     cudaEventSynchronize(ta1);
     
     float ms_A = 0; cudaEventElapsedTime(&ms_A, ta0, ta1);

@@ -20,11 +20,7 @@
 #define N_TOTAL          (1 << 28)    // 256 M elements (~1 GB at float32)
 #define N_CHUNKS         16           // Number of chunks for the stream pipeline
 #define CHUNK_SIZE       (N_TOTAL / N_CHUNKS) // Elements per chunk
-<<<<<<< HEAD
 #define TRANSFORM_ITERS  200
-=======
-#define TRANSFORM_ITERS  50           // Compute load per element (Computational Intensity)
->>>>>>> f6595ad869480fe79689f43c3d82f421fbd1e75b
 
 // ============================================================================
 // DO NOT MODIFY THE FOLLOWING MACROS
