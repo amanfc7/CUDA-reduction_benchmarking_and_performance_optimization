@@ -1,5 +1,5 @@
 import re
-import os  
+import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,8 +24,8 @@ def parse_and_average(filename):
     no_stream_times = [float(t) for t in re.findall(r"no-stream\s+([\d.]+)", content)]
     data["no-stream"] = no_stream_times
     
-    # Looks for a number (stream count), spaces, and a float (time)
-    # This bypasses the trailing text requirements completely
+    # Targets the start of the line, grabs the stream count, and the execution time.
+    
     stream_runs = re.findall(r"^\s*(\d+)\s+([\d.]+)", content, re.MULTILINE)
     for stream_count, time_val in stream_runs:
         if stream_count in data:
@@ -83,14 +83,8 @@ for iters in [1, 50, 200]:
     except FileNotFoundError:
         print(f"Error: Missing logs for iteration configuration: {iters}")
 
-# Plot of the trends across different stream
-
+# Plot the trends for Version B across different stream counts and iteration configurations:
 if plot_trends:
-    # Force matplotlib to use a standard visual window backend if running locally
-    import matplotlib
-    if not os.environ.get('DISPLAY', '') and not os.name == 'nt':
-        matplotlib.use('Agg') # Fallback for headless environments
-        
     fig = plt.figure(figsize=(10, 6))
     
     stream_labels = ['1', '2', '4', '8']
@@ -112,9 +106,8 @@ if plot_trends:
     plt.legend(fontsize=11)
     
     plot_filename = "cuda_streams_comparison.png"
-    
     fig.savefig(plot_filename, dpi=300, bbox_inches='tight')
-    print(f"\n[Plot Success] Comparison line graph saved as: {os.path.abspath(plot_filename)}")
-
+    print(f"\n[Plot Success] Comparison line graph exported as: {os.path.abspath(plot_filename)}")
+    
     plt.show()
     plt.close(fig)
