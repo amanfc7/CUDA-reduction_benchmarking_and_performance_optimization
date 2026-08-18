@@ -10,13 +10,13 @@ The implementations are benchmarked across input sizes from **2 MB to 4096 MB** 
 
 ## Implementations
 
-### Version A — Interleaved Tree Reduction
+### Part A — Interleaved Tree Reduction
 
 A shared-memory reduction using interleaved thread addressing.
 
 This implementation serves as the baseline GPU approach. Its conditional execution pattern introduces **warp divergence**, reducing effective SIMD utilization.
 
-### Version B — Sequential Tree Reduction
+### Part B — Sequential Tree Reduction
 
 A shared-memory reduction using a converging stride:
 
@@ -24,7 +24,7 @@ A shared-memory reduction using a converging stride:
 
 The `tid < stride` condition keeps active threads contiguous within warps, eliminating the divergence present in the interleaved implementation.
 
-### Version C — Warp-Shuffle Reduction
+### Part C — Warp-Shuffle Reduction
 
 The optimized implementation uses CUDA warp-shuffle intrinsics for intra-warp communication.
 
