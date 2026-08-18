@@ -74,7 +74,7 @@ The profiler reported no GPU-utilization problems during kernel execution.
 * Linux
 * Git
 
-## Project details:
+## Other details:
 
 This project explores practical GPU performance considerations including:
 
